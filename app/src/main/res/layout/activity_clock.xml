@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textSize="150sp"
+        android:textColor="#FFFFFF"
+        android:text="11:11 PM"
+        android:ellipsize="none"
+        android:textAlignment="center"
+        android:id="@+id/bigClockTxt"
+        android:fontFamily="@font/digital"
+        android:letterSpacing="0.05"
+        android:singleLine="true" />
+
+</RelativeLayout>
