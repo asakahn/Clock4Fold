@@ -9,6 +9,11 @@ Features:
 
 \*Has only been tested for the Z Fold 2*
 
+Usage:
+- Launch the app on the outer display and simply unfold your phone slightly like in the photos below.
+- *Recommended:* Leave your phone to charge on a wireless charger!
+- (The app will work on the unfolded screen, but obviously that's not the intended use case.)
+
 ![](photos/IMG_4322.jpg)
 ![](photos/IMG_4323.jpg)
 ![](photos/IMG_4324.jpg)
