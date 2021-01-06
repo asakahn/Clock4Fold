@@ -11,7 +11,8 @@ Features:
 
 Usage:
 - Launch the app on the outer display and simply unfold your phone slightly like in the photos below.
-- *Recommended:* Leave your phone to charge on a wireless charger!
+- *Recommended:* Open Settings -> Display -> Continue Apps on cover screen -> Enable Clock4Fold
+- Leave your phone to charge on a wireless charger!
 - (The app will work on the unfolded screen, but obviously that's not the intended use case.)
 
 ![](photos/IMG_4322.jpg)
