@@ -5,7 +5,8 @@ A simple clock app for the Galaxy Z Fold 2.
 Features:
 - Change clock color
 - Choose time format
-- The app will flash a black screen every ~4 minutes to prevent screen burn in.
+- The app will flash a black screen every ~4 minutes to prevent screen burn-in.
+- The clock text will shift left/right to further prevent screen burn-in
 
 \*Has only been tested for the Z Fold 2*
 
