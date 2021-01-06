@@ -10,6 +10,9 @@ import android.os.Handler;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -47,9 +50,9 @@ public class clockActivity extends AppCompatActivity {
         // If Landscape, Make Text Bigger, Otherwise Portrait make text smaller
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             if(checkedradioGroupTimeFormat == 0) {
-                bigClockTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, 169);
+                bigClockTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, 269);
             } else if (checkedradioGroupTimeFormat == 1) {
-                bigClockTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, 150);
+                bigClockTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, 190);
             } else {
                 bigClockTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, 150);
             }
@@ -95,12 +98,61 @@ public class clockActivity extends AppCompatActivity {
             }, 10);
         }
 
+        // ###############################################################################################
+        // Create Animation to shift text from left to right
+        TranslateAnimation animateText = new TranslateAnimation(
+                Animation.ABSOLUTE, -69.0f, Animation.ABSOLUTE, 69.0f,
+                Animation.ABSOLUTE, 0.0f, Animation.ABSOLUTE, 0.0f );
+        animateText.setDuration(65000);
+
+        TranslateAnimation animateText2 = new TranslateAnimation(
+                Animation.ABSOLUTE, 69.0f, Animation.ABSOLUTE, -69.0f,
+                Animation.ABSOLUTE, 0.0f, Animation.ABSOLUTE, 0.0f );
+        animateText2.setDuration(65000);
+
+        // Start first animation, then let the Listeners below handle the rest.
+        int startInitialAnimation = 0;
+        if (startInitialAnimation == 0) {
+            bigClockTxt.startAnimation(animateText);
+            startInitialAnimation = 1;
+        }
+
+        // When first animation ends, start second one.
+        animateText.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                bigClockTxt.startAnimation(animateText2);
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        // When second animation ends, start first one.
+        animateText2.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                bigClockTxt.startAnimation(animateText);
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+
+        // ###############################################################################################
+
+
         // These 2 handlers below are to flicker a black screen in hopes of preventing screen burn in
         final Handler blipBlackScreen = new Handler(getMainLooper());
         blipBlackScreen.postDelayed(new Runnable() {
             @Override
             public void run() {
-                bigClockTxt.setVisibility(View.INVISIBLE);
+                bigClockTxt.setTextColor(Color.parseColor("#00000000"));
                 blipBlackScreen.postDelayed(this, 240000);
             }
         }, 10);
@@ -109,7 +161,7 @@ public class clockActivity extends AppCompatActivity {
         blipBlackScreen2.postDelayed(new Runnable() {
             @Override
             public void run() {
-                bigClockTxt.setVisibility(View.VISIBLE);
+                bigClockTxt.setTextColor(Color.parseColor(hexColor));
                 blipBlackScreen2.postDelayed(this, 240200);
             }
         }, 10);
