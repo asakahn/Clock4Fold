@@ -27,6 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="20dp"
         android:layout_toEndOf="@id/colorPickerView"/>
 
     <RadioGroup
@@ -55,16 +56,26 @@
 
     </RadioGroup>
 
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/radioGroupTimeFormat"
+        android:text="Remove 0 in hour"
+        android:textColor="#FFF"
+        android:layout_toEndOf="@id/colorPickerView"
+        android:layout_marginLeft="15dp"
+        android:id="@+id/chkBoxNoZero"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start Clock"
         android:layout_centerHorizontal="true"
         android:id="@+id/btnStartClock"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/radioGroupTimeFormat"
-        android:layout_toEndOf="@id/colorPickerView"
-        android:layout_marginLeft="15dp"/>
+        android:layout_below="@+id/boxChosenColor"
+        android:layout_toEndOf="@id/chkBoxNoZero"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="15dp"/>
 
 
 

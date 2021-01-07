@@ -17,9 +17,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.skydoves.colorpickerview.ColorPickerView;
 import com.skydoves.colorpickerview.listeners.ColorListener;
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private Button boxChosenColor, btnStartClock;
     private RadioButton radioBtn24, radioBtn12;
     private RadioGroup radioGroupTimeFormat;
+    private CheckBox chkBoxNoZero;
     int idx;
 
     @Override
@@ -45,15 +48,55 @@ public class MainActivity extends AppCompatActivity {
         radioBtn12 = findViewById(R.id.radioBtn12);
         btnStartClock = findViewById(R.id.btnStartClock);
         radioGroupTimeFormat = findViewById(R.id.radioGroupTimeFormat);
+        chkBoxNoZero = findViewById(R.id.chkBoxNoZero);
 
         // Update last selected button on start up
         radioBtn24.setChecked(UpdateRadioState("Button_24"));
         radioBtn12.setChecked(UpdateRadioState("Button_12"));
+        if(UpdateRadioState("Button_24") == true) {
+            idx = 0;
+        } else {
+            idx = 1;
+        }
 
         // Update last selected color on start up
         SharedPreferences sp = getSharedPreferences("AK_APPS", MODE_PRIVATE);
         String hexColor = sp.getString("selectedColor", "#FFFFFFFF");
         colorPickerView.setInitialColor(Color.parseColor(hexColor));
+
+        // Update chkBoxNoZero (true/false) state on start up
+        boolean chkBoxNoZeroBool = sp.getBoolean("chkBoxNoZero", false);
+        chkBoxNoZero.setChecked(chkBoxNoZeroBool);
+
+        // Checks whether the checkbox is checked and returns true/false
+        if(chkBoxNoZero.isChecked()) {
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putBoolean("chkBoxNoZero", true);
+            editor.apply();
+        } else {
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putBoolean("chkBoxNoZero", false);
+            editor.apply();
+        }
+
+        chkBoxNoZero.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    Toast.makeText(MainActivity.this, "Time will show as 1:11 instead of 01:11", Toast.LENGTH_SHORT).show();
+                    SharedPreferences sp = getSharedPreferences("AK_APPS", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putBoolean("chkBoxNoZero", true);
+                    editor.apply();
+                } else {
+                    Toast.makeText(MainActivity.this, "Time will show as 01:11 instead of 1:11", Toast.LENGTH_SHORT).show();
+                    SharedPreferences sp = getSharedPreferences("AK_APPS", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putBoolean("chkBoxNoZero", false);
+                    editor.apply();
+                }
+            }
+        });
 
         // Change color of boxChosenColor, and save chosen HEX color
         colorPickerView.setColorListener(new ColorListener() {
@@ -70,35 +113,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Gets selected index of RadioButton if this isn't the first time the app is launched.
-        int checkedradioGroupTimeFormat = radioGroupTimeFormat.getCheckedRadioButtonId();
-        switch (checkedradioGroupTimeFormat) {
-            case R.id.radioBtn24:
-                idx = 0;
-                break;
-            case R.id.radioBtn12:
-                idx = 1;
-                break;
-            default:
-                idx = 1;
-                break;
-        }
-
-        // If select a different radio button, update idx so can pass it on to the next activity.
-        radioBtn24.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        // Update idx from RadioGroup
+        radioGroupTimeFormat.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked_24) {
-                SaveRadioState("Button_24", isChecked_24);
-                idx = 1;
-            }
-        });
-
-        // If select a different radio button, update idx so can pass it on to the next activity.
-        radioBtn12.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked_12) {
-                SaveRadioState("Button_12", isChecked_12);
-                idx = 0;
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.radioBtn24:
+                        idx = 0;
+                        SaveRadioState("Button_24", true);
+                        SaveRadioState("Button_12", false);
+                        break;
+                    case R.id.radioBtn12:
+                        idx = 1;
+                        SaveRadioState("Button_12", true);
+                        SaveRadioState("Button_24", false);
+                        break;
+                    default:
+                        idx = 1;
+                        break;
+                }
             }
         });
 
