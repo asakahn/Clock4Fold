@@ -1,5 +1,7 @@
 package com.asakahn.clock4fold;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,13 +9,16 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,6 +32,12 @@ public class clockActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Gets display resolution
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
         getSupportActionBar().hide(); // Hides title bar
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN); // Hides Status bar
         getWindow().getDecorView().setSystemUiVisibility( // Hides Navigation Bar
@@ -37,6 +48,39 @@ public class clockActivity extends AppCompatActivity {
 
         // ID Clock TextView
         bigClockTxt = findViewById(R.id.bigClockTxt);
+
+        // ConstraintSet defaults to middle
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(this, R.layout.activity_clock);
+        float biasedValue = 0.5f;
+        constraintSet.setVerticalBias(R.id.bigClockTxt, biasedValue);
+        constraintSet.applyTo((ConstraintLayout) findViewById(R.id.clockConstraintLayout));
+
+        // Hard coded values for Galaxy Z Fold 2
+        // Move clock text to middle for front display
+        // Move clock text to upper portion on inside display like a laptop
+        if(width == 840 && height == 2246) {
+            //Toast.makeText(this, "Front display Portrait", Toast.LENGTH_SHORT).show();
+            biasedValue = 0.5f;
+            constraintSet.setVerticalBias(R.id.bigClockTxt, biasedValue);
+            constraintSet.applyTo((ConstraintLayout) findViewById(R.id.clockConstraintLayout));
+        } else if (width == 2246 && height == 840) {
+            //Toast.makeText(this, "Front display landscape", Toast.LENGTH_SHORT).show();
+            biasedValue = 0.5f;
+            constraintSet.setVerticalBias(R.id.bigClockTxt, biasedValue);
+            constraintSet.applyTo((ConstraintLayout) findViewById(R.id.clockConstraintLayout));
+        } else if (width == 1768 && height == 2120) {
+            //Toast.makeText(this, "Inside display Portrait", Toast.LENGTH_SHORT).show();
+            biasedValue = 0.5f;
+            constraintSet.setVerticalBias(R.id.bigClockTxt, biasedValue);
+            constraintSet.applyTo((ConstraintLayout) findViewById(R.id.clockConstraintLayout));
+        } else if (width == 2120 && height == 1768) {
+            //Toast.makeText(this, "Inside display landscape", Toast.LENGTH_SHORT).show();
+            biasedValue = 0.12f;
+            constraintSet.setVerticalBias(R.id.bigClockTxt, biasedValue);
+            constraintSet.applyTo((ConstraintLayout) findViewById(R.id.clockConstraintLayout));
+        }
+
 
         // Get HEX Color from ColorPicker from last Activity
         SharedPreferences sp = getSharedPreferences("AK_APPS", MODE_PRIVATE);
@@ -139,59 +183,6 @@ public class clockActivity extends AppCompatActivity {
                 }, 10);
             }
         }
-        /*
-        // ###############################################################################################
-        // Create Animation to shift text from left to right
-        TranslateAnimation animateText = new TranslateAnimation(
-                Animation.ABSOLUTE, -69.0f, Animation.ABSOLUTE, 69.0f,
-                Animation.ABSOLUTE, 0.0f, Animation.ABSOLUTE, 0.0f );
-        animateText.setDuration(65000);
-        animateText.setDuration(1000);
-
-        TranslateAnimation animateText2 = new TranslateAnimation(
-                Animation.ABSOLUTE, 69.0f, Animation.ABSOLUTE, -69.0f,
-                Animation.ABSOLUTE, 0.0f, Animation.ABSOLUTE, 0.0f );
-        animateText2.setDuration(65000);
-        animateText2.setDuration(1000);
-
-        // Start first animation, then let the Listeners below handle the rest.
-        int startInitialAnimation = 0;
-        if (startInitialAnimation == 0) {
-            bigClockTxt.startAnimation(animateText);
-            startInitialAnimation = 1;
-        }
-
-        // When first animation ends, start second one.
-        animateText.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                bigClockTxt.startAnimation(animateText2);
-            }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-        // When second animation ends, start first one.
-        animateText2.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                bigClockTxt.startAnimation(animateText);
-            }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-
-        // ###############################################################################################
-
-
-         */ // DON'T TOUCH THIS WORKS!!!!!!
 
         // ###############################################################################################
         // Create Animation to shift text from left to right
