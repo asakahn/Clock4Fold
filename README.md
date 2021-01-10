@@ -2,6 +2,8 @@
 
 A simple clock app for the Galaxy Z Fold 2.
 
+Play Store Link: https://play.google.com/store/apps/details?id=com.asakahn.clock4fold
+
 Features:
 - Change clock color
 - Choose time format
