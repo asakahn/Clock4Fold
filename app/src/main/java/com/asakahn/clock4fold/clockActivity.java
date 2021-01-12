@@ -97,14 +97,14 @@ public class clockActivity extends AppCompatActivity {
         // If Landscape, Make Text Bigger, Otherwise Portrait make text smaller
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             if(checkedradioGroupTimeFormat == 0) {
-                bigClockTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, 269);
+                bigClockTxt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 269);
             } else if (checkedradioGroupTimeFormat == 1) {
-                bigClockTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, 220);
+                bigClockTxt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 220);
             } else {
-                bigClockTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, 150);
+                bigClockTxt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 150);
             }
         } else {
-            bigClockTxt.setTextSize(TypedValue.COMPLEX_UNIT_SP, 74);
+            bigClockTxt.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 74);
         }
 
         // Depending on the Radio button selected, show the different time formats. Defaults to 12hr format if nothing selected.
